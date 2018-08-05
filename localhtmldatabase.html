@@ -1,0 +1,55 @@
+<div id='rr' onclick='adddetails();'>click</div><div id='status'></div>
+<script>
+var fnamer;
+ 
+function adddetails() { 
+var idr = "8";
+var fnamer = "Gordon";
+var lnamer = "Green";
+var titler = "Mr";
+var emailr = "email";
+var streetnumr = "2";
+var streetnamer = "A street";
+var buildingnumr = "4";
+var buildingnamer = "Crazy Heights";
+var suburbr = "Pretty Suburb";
+var townr = "New Town";
+var provincer = "Gauteng";
+var postalcoder = "2776";
+var landphoner = "34567893";
+         var db = openDatabase('mydb', '1.0', 'Test DB', 2 * 1024 * 1024);
+         var msg;
+			
+         db.transaction(function (tx) {
+            tx.executeSql('CREATE TABLE IF NOT EXISTS ADR (id unique, fname, lname, title, email, streetnum, streetname, buildingnum, buildingname, suburb, town, province, postalcode, landline, mobile, ps)');
+            tx.executeSql('INSERT INTO ADR (id, fname, lname, title, email, streetnum, streetname, buildingnum, buildingname, suburb, town, province, postalcode, landline) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [idr, fnamer, lnamer, titler, emailr, streetnumr, streetnamer, buildingnumr, buildingnamer, suburbr, townr, provincer, postalcoder, landphoner]);
+           
+            msg = '<p>Log message created and row inserted.</p>';
+            document.querySelector('#status').innerHTML =  msg;
+         });
+ 
+         db.transaction(function (tx) {
+            tx.executeSql('SELECT * FROM ADR', [], function (tx, results) {
+               var len = results.rows.length, i;
+               msg = "<p>Found rows: " + len + "</p>";
+               document.querySelector('#status').innerHTML +=  msg;
+					
+               for (i = 0; i < len; i++){
+                  msg = "<p><b>" + results.rows.item(i).fname + "</b></p>";
+                  document.querySelector('#status').innerHTML +=  msg;
+msg = "<p><b>" + results.rows.item(i).lname + "</b></p>";
+                  document.querySelector('#status').innerHTML +=  msg;
+               }
+            }, null);
+         }); } 
+ 
+ 
+			
+       </script>
+ 
+
+ 
+ 
+		
+ 
+			
